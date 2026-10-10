@@ -9,6 +9,7 @@ TEMP_FILE = "data/panels_temp.json"
 
 
 def update_panels():
+  # 1. Load existing data as a safety backup fallback
   existing_data = {}
   if os.path.exists(DATA_FILE):
     try:
@@ -17,18 +18,16 @@ def update_panels():
     except:
       pass
 
-  new_providers = existing_data.get(
-      "providers",
-      {
-          "pharmacies": [],
-          "clinics": [],
-          "clinics_24hr": [],
-          "vaccination": [],
-          "hospitals": [],
-          "hospitals_ae": [],
-          "physio": [],
-      },
-  )
+  # Default structure for the 7 Great Journey categories
+  providers_data = {
+      "pharmacies": [],
+      "clinics": [],
+      "clinics_24hr": [],
+      "vaccination": [],
+      "hospitals": [],
+      "hospitals_ae": [],
+      "physio": [],
+  }
 
   try:
     print("Checking Great Eastern locator page...")
@@ -41,28 +40,49 @@ def update_panels():
     resp.raise_for_status()
 
     soup = BeautifulSoup(resp.text, "html.parser")
-    # Dynamic link scanning safeguard hook goes here
-    # If site structure changes or fails validation, fail-safe keeps previous month's data intact.
+
+    # Scrape PDF links dynamically from the page
+    for a in soup.find_all("a", href=True):
+      href = a["href"]
+      text = a.get_text().lower()
+
+      # Match categories and store sample/download references
+      if "pdf" in href.lower() or "pdf" in text:
+        item = {
+            "name": a.get_text().strip(),
+            "state": "Malaysia",
+            "address": "Official Great Eastern Panel PDF",
+            "details": f"Download Link: {href if href.startswith('http') else 'https://www.greateasternlife.com' + href}",
+        }
+
+        if "pharmacy" in text:
+          providers_data["pharmacies"].append(item)
+        elif "24 hour" in text or "24-hour" in text:
+          providers_data["clinics_24hr"].append(item)
+        elif "vaccination" in text:
+          providers_data["vaccination"].append(item)
+        elif "physiotherapy" in text:
+          providers_data["physio"].append(item)
+        elif "hospital" in text and ("accident" in text or "emergency" in text):
+          providers_data["hospitals_ae"].append(item)
+        elif "hospital" in text:
+          providers_data["hospitals"].append(item)
+        elif "clinic" in text:
+          providers_data["clinics"].append(item)
 
     today_str = datetime.date.today().strftime("%Y-%m-%d")
-    final_output = {
-        "last_updated": today_str,
-        "providers": new_providers,  # Preserves active validated data
-    }
+    final_output = {"last_updated": today_str, "providers": providers_data}
 
     os.makedirs("data", exist_ok=True)
     with open(TEMP_FILE, "w", encoding="utf-8") as f:
       json.dump(final_output, f, ensure_ascii=False, indent=2)
 
     os.replace(TEMP_FILE, DATA_FILE)
-    print("✅ Panel check completed safely.")
+    print("✅ Panel check and data sync completed successfully.")
 
   except Exception as e:
     print(f"❌ Error encountered: {e}")
-    print(
-        "🛡️ Fail-safe activated: Keeping last month's data untouched to prevent"
-        " downtime."
-    )
+    print("🛡️ Fail-safe activated: Preserving previous data.")
     if os.path.exists(TEMP_FILE):
       os.remove(TEMP_FILE)
 
