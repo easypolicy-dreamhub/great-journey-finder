@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Great Journey - Panel Finder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-indigo-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-hospital-user text-indigo-400"></i> The Great Journey Panel Finder
+                </h1>
+                <p class="text-indigo-200 text-sm mt-1">Official Great Eastern Curated Healthcare Network (Categories 1 to 7)</p>
+            </div>
+            <div id="last-updated" class="text-xs bg-indigo-800 px-3 py-1.5 rounded-full mt-3 md:mt-0 text-indigo-200">
+                Loading update status...
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-10 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto">
+            <div class="flex space-x-2 py-3 min-w-max" id="category-tabs">
+                <!-- Tabs will be injected here -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        <!-- Search & Filters Bar -->
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6 flex flex-col md:flex-row gap-4">
+            <div class="flex-1 relative">
+                <i class="fa-solid fa-search absolute left-3.5 top-3.5 text-slate-400"></i>
+                <input type="text" id="search-input" placeholder="Search by provider name, address..." class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+            </div>
+            <div class="w-full md:w-64">
+                <select id="state-filter" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white">
+                    <option value="">All States / Locations</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Results Counter -->
+        <div class="flex justify-between items-center mb-4">
+            <p id="result-count" class="text-sm font-medium text-slate-600">Loading providers...</p>
+        </div>
+
+        <!-- Data Table / Card Grid -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-200">
+                    <thead class="bg-slate-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Provider Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">State / City</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Address & Contact</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Details / Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="provider-table-body" class="divide-y divide-slate-200 bg-white text-sm">
+                        <!-- Rows populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="no-results" class="hidden p-12 text-center text-slate-500">
+                <i class="fa-solid fa-folder-open text-4xl mb-3 text-slate-300"></i>
+                <p>No providers found matching your search filters.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+        <p>Panel listings are updated automatically on a monthly schedule. Please confirm details with the provider before visiting.</p>
+    </footer>
+
+    <script>
+        const CATEGORIES = {
+            pharmacies: { name: "Pharmacies", icon: "fa-pills" },
+            clinics: { name: "Clinics", icon: "fa-clinic-medical" },
+            clinics_24hr: { name: "24-Hour Clinics", icon: "fa-clock" },
+            vaccination: { name: "Vaccination 2026", icon: "fa-syringe" },
+            hospitals: { name: "Hospitals", icon: "fa-hospital" },
+            hospitals_ae: { name: "A&E Hospitals", icon: "fa-truck-medical" },
+            physio: { name: "Physiotherapy", icon: "fa-dumbbell" }
+        };
+
+        let currentCategory = 'hospitals';
+        let panelData = {};
+        let allStates = new Set();
+
+        async function loadData() {
+            try {
+                const response = await fetch('data/panels.json');
+                if (!response.ok) throw new Error('Data file not found');
+                panelData = await response.json();
+                document.getElementById('last-updated').innerText = `Last Updated: ${panelData.last_updated || 'Recent'}`;
+            } catch (err) {
+                // Fallback sample data if panels.json hasn't been generated yet
+                panelData = {
+                    last_updated: "Initializing (Run Action)",
+                    providers: { hospitals: [{ name: "Sample Hospital", state: "Selangor", address: "Petaling Jaya, Selangor", details: "Run GitHub Action to fetch live PDF data" }] }
+                };
+                document.getElementById('last-updated').innerText = "Status: Waiting for first monthly sync";
+            }
+            renderTabs();
+            filterAndRender();
+        }
+
+        function renderTabs() {
+            const container = document.getElementById('category-tabs');
+            container.innerHTML = '';
+            for (const [key, info] of Object.entries(CATEGORIES)) {
+                const count = (panelData.providers && panelData.providers[key]) ? panelData.providers[key].length : 0;
+                const isActive = key === currentCategory;
+                const btn = document.createElement('button');
+                btn.className = `flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${isActive ? 'bg-indigo-600 text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`;
+                btn.innerHTML = `<i class="fa-solid ${info.icon}"></i> ${info.name} <span class="ml-1 px-1.5 py-0.5 text-xs rounded-full ${isActive ? 'bg-indigo-700 text-indigo-100' : 'bg-slate-200 text-slate-600'}">${count}</span>`;
+                btn.onclick = () => { currentCategory = key; renderTabs(); updateStateDropdown(); filterAndRender(); };
+                container.appendChild(btn);
+            }
+            updateStateDropdown();
+        }
+
+        function updateStateDropdown() {
+            const select = document.getElementById('state-filter');
+            const currentVal = select.value;
+            select.innerHTML = '<option value="">All States / Locations</option>';
+            
+            allStates.clear();
+            const list = (panelData.providers && panelData.providers[currentCategory]) || [];
+            list.forEach(item => { if (item.state) allStates.add(item.state); });
+
+            Array.from(allStates).sort().forEach(state => {
+                const opt = document.createElement('option');
+                opt.value = state;
+                opt.textContent = state;
+                select.appendChild(opt);
+            });
+            select.value = currentVal;
+        }
+
+        function filterAndRender() {
+            const searchVal = document.getElementById('search-input').value.toLowerCase();
+            const stateVal = document.getElementById('state-filter').value;
+            const list = (panelData.providers && panelData.providers[currentCategory]) || [];
+
+            const filtered = list.filter(item => {
+                const matchesSearch = (item.name + " " + item.address + " " + (item.details || "")).toLowerCase().includes(searchVal);
+                const matchesState = !stateVal || item.state === stateVal;
+                return matchesSearch && matchesState;
+            });
+
+            const tbody = document.getElementById('provider-table-body');
+            const noRes = document.getElementById('no-results');
+            tbody.innerHTML = '';
+
+            if (filtered.length === 0) {
+                noRes.classList.remove('hidden');
+            } else {
+                noRes.classList.add('hidden');
+                filtered.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50 transition-colors";
+                    tr.innerHTML = `
+                        <td class="px-6 py-4 font-medium text-slate-900">${item.name || '-'}</td>
+                        <td class="px-6 py-4 text-slate-600">${item.state || '-'}</td>
+                        <td class="px-6 py-4 text-slate-600">${item.address || '-'}</td>
+                        <td class="px-6 py-4 text-slate-500">${item.details || '-'}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+            document.getElementById('result-count').innerText = `Showing ${filtered.length} providers`;
+        }
+
+        document.getElementById('search-input').addEventListener('input', filterAndRender);
+        document.getElementById('state-filter').addEventListener('change', filterAndRender);
+
+        loadData();
+    </script>
+</body>
+</html>
