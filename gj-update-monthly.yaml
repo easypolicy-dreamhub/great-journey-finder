@@ -1,0 +1,55 @@
+name: Great Journey data refresh
+
+on:
+  schedule:
+    # 11:00 AM Malaysia time on the 1st and 16th of every month.
+    # Great Eastern re-issues its lists on different days, so checking twice a month
+    # keeps the app close to the official lists. Each run takes about a minute.
+    - cron: "0 3 1,16 * *"
+  # Lets you run it by hand from the Actions tab ("Run workflow" button).
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: gj-data-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python packages
+        run: pip install requests beautifulsoup4 pdfplumber
+
+      - name: Download the PDFs and rebuild the data
+        run: python3 scripts/update_data.py
+
+      - name: Save the new data if anything changed
+        run: |
+          git config user.name "gj-finder-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No changes this time - nothing to save."
+          else
+            git commit -m "Great Journey data refresh ($(date -u +%Y-%m-%d))"
+            # If someone edited the repo while this ran, rebase on top of it instead of failing.
+            git pull --rebase origin main
+            git push
+          fi
+
+      - name: Ask GitHub Pages to rebuild the site
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "Pages rebuild request skipped"
