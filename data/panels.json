@@ -1,0 +1,12 @@
+{
+  "last_updated": "2026-10-10",
+  "providers": {
+    "pharmacies": [],
+    "clinics": [],
+    "clinics_24hr": [],
+    "vaccination": [],
+    "hospitals": [],
+    "hospitals_ae": [],
+    "physio": []
+  }
+}
