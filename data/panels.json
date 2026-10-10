@@ -1,12 +1,73 @@
 {
   "last_updated": "2026-10-10",
   "providers": {
-    "pharmacies": [],
-    "clinics": [],
-    "clinics_24hr": [],
-    "vaccination": [],
-    "hospitals": [],
-    "hospitals_ae": [],
-    "physio": []
+    "pharmacies": [
+      {
+        "name": "Download The Great Journey Pharmacy List (PDF)",
+        "state": "Malaysia",
+        "address": "Official Great Eastern Panel PDF",
+        "details": "Download Link: https://www.greateasternlife.com/content/dam/corp-site/my/malaysia/gelm-brand-comm/gelm-healthcare-services/healthcare-overview/pharmacy-list/gelm-others-cs-the-great-journey-pharmacy-listing-oct-2025.pdf"
+      }
+    ],
+    "clinics": [
+      {
+        "name": "Download The Great Journey Clinic List (PDF)",
+        "state": "Malaysia",
+        "address": "Official Great Eastern Panel PDF",
+        "details": "Download Link: https://www.greateasternlife.com/content/dam/corp-site/my/malaysia/gelm-ops-hsd/0926/gelm-hsd-cs-tgj-clinic-listing-23Sep2026.pdf"
+      },
+      {
+        "name": "Download Panel Clinic (for New Business & CS Alterations/Reinstatement) List (PDF)",
+        "state": "Malaysia",
+        "address": "Official Great Eastern Panel PDF",
+        "details": "Download Link: https://www.greateasternlife.com/content/dam/corp-site/my/malaysia/gelm-brand-comm/gelm-new-business/gelm-nb-pi-panel-clinic-listing-october-2026.pdf"
+      }
+    ],
+    "clinics_24hr": [
+      {
+        "name": "Download The Great Journey Clinic List (24 Hours) (PDF)",
+        "state": "Malaysia",
+        "address": "Official Great Eastern Panel PDF",
+        "details": "Download Link: https://www.greateasternlife.com/content/dam/corp-site/my/malaysia/gelm-ops-hsd/0926/gelm-hsd-cs-tgj-clinic-listing-24hours-23Sep2026.pdf"
+      }
+    ],
+    "vaccination": [
+      {
+        "name": "Download The Great Journey Clinic (for Vaccination Health Programme 2026) List (PDF)",
+        "state": "Malaysia",
+        "address": "Official Great Eastern Panel PDF",
+        "details": "Download Link: https://www.greateasternlife.com/content/dam/corp-site/my/malaysia/gelm-ops-hsd/vaccination-health-programme/gelm-hsd-cs-tgj-clinic-listing-vhp-11Aug2026.pdf"
+      }
+    ],
+    "hospitals": [
+      {
+        "name": "Download The Great Journey Hospital List (PDF)",
+        "state": "Malaysia",
+        "address": "Official Great Eastern Panel PDF",
+        "details": "Download Link: https://www.greateasternlife.com/content/dam/corp-site/my/malaysia/gelm-ops-hsd/0726/gelm-hsd-cs-tgj-hospital-listing-14July2026.pdf"
+      },
+      {
+        "name": "Download Panel Hospital List (PDF)",
+        "state": "Malaysia",
+        "address": "Official Great Eastern Panel PDF",
+        "details": "Download Link: https://www.greateasternlife.com/content/dam/corp-site/my/malaysia/gelm-ops-hsd/0926/gelm-hsd-cs-panel-hospital-listing-15Sep2026.pdf"
+      }
+    ],
+    "hospitals_ae": [
+      {
+        "name": "Download The Great Journey Hospital (for Accident and Emergency Outpatient Treatment) List (PDF)",
+        "state": "Malaysia",
+        "address": "Official Great Eastern Panel PDF",
+        "details": "Download Link: https://www.greateasternlife.com/content/dam/corp-site/my/malaysia/gelm-ops-hsd/0726/gelm-hsd-cs-tgj-hospital-listing-ae-14July2026.pdf"
+      }
+    ],
+    "physio": [
+      {
+        "name": "Download The Great Journey Physiotherapy Centre List (PDF)",
+        "state": "Malaysia",
+        "address": "Official Great Eastern Panel PDF",
+        "details": "Download Link: https://www.greateasternlife.com/content/dam/corp-site/my/malaysia/gelm-brand-comm/gelm-healthcare-services/0326/gelm-hsd-cs-tgj-physio-listing-16Mar2026.pdf"
+      }
+    ]
   }
 }
