@@ -1,60 +1,162 @@
 {
   "last_updated": "2026-10-10",
   "providers": {
-    "pharmacies": [
+    "hospitals": [
       {
-        "name": "The Great Journey Pharmacy List",
-        "state": "Malaysia (All States)",
-        "address": "Official PDF Directory",
-        "details": "https://www.greateasternlife.com/content/dam/greateasternlife/malaysia/english/customer-services/healthcare-services/healthcare-overview/pdf/the-great-journey-pharmacy-list.pdf"
+        "name": "Aurelius Hospital Alor Setar",
+        "state": "Kedah",
+        "address": "No B-5, Persiaran Bandar Baru Mergong, Jalan Perusahaan 1, Bandar Baru Mergong, 05150 Alor Setar, Kedah",
+        "details": "A&E & Hospitalisation Privileges"
+      },
+      {
+        "name": "Columbia Asia Hospital, Klang",
+        "state": "Selangor",
+        "address": "Jalan Mahkota 1 / KU 2, Mutiara Bukit Raja 2, KM2 off Jalan Meru, 41050 Klang, Selangor",
+        "details": "The Great Journey Hospital Partner"
+      },
+      {
+        "name": "KPJ Kajang Specialist Hospital",
+        "state": "Selangor",
+        "address": "Jalan Cheras, Kampung Sungai Kantan, 43000 Kajang, Selangor",
+        "details": "Priority Admission & Fee Waivers"
+      },
+      {
+        "name": "Bukit Tinggi Medical Centre",
+        "state": "Selangor",
+        "address": "Lot 83211, Persiaran Batu Nilam, Bandar Bukit Tinggi 1, 41200 Klang, Selangor",
+        "details": "Enhanced Admission Support"
+      },
+      {
+        "name": "Sungai Long Specialist Hospital",
+        "state": "Selangor",
+        "address": "PT 21147 Persiaran Sungai Long 1, Bandar Sungai Long, 43000 Kajang, Selangor",
+        "details": "The Great Journey Hospital Partner"
+      },
+      {
+        "name": "Cengild G.I. Medical Centre",
+        "state": "Kuala Lumpur",
+        "address": "Unit 2-3 & 2-4, Nexus Bangsar South, No 7, Jalan Kerinchi, 59200 Kuala Lumpur",
+        "details": "Specialized Medical Centre"
+      },
+      {
+        "name": "Columbia Asia Hospital, Bukit Jalil",
+        "state": "Kuala Lumpur",
+        "address": "No.9, Jalan Jalil Perkasa 7, Bukit Jalil, 57000 Kuala Lumpur",
+        "details": "Enhanced Admission Support"
+      },
+      {
+        "name": "Pantai Hospital Ampang",
+        "state": "Kuala Lumpur",
+        "address": "Jalan Perubatan 1, Pandan Indah, 55100 Kuala Lumpur",
+        "details": "Priority Admission Counter"
+      },
+      {
+        "name": "Sunway Medical Centre Velocity",
+        "state": "Kuala Lumpur",
+        "address": "Lingkaran SV, Sunway Velocity, 55100 Kuala Lumpur",
+        "details": "Gestures of Care & Fee Waivers"
+      },
+      {
+        "name": "Mahkota Medical Centre",
+        "state": "Melaka",
+        "address": "No 3, Mahkota Melaka, Jalan Merdeka, 75000 Melaka",
+        "details": "Early Discharge Programme"
+      },
+      {
+        "name": "Oriental Melaka Straits Medical Centre",
+        "state": "Melaka",
+        "address": "Pusat Perubatan, Klebang, 75200 Melaka",
+        "details": "The Great Journey Hospital Partner"
+      },
+      {
+        "name": "Columbia Asia Hospital, Tebrau",
+        "state": "Johor",
+        "address": "5, Kota, Persiaran Southkey 1, Southkey, 80150 Johor Bahru, Johor",
+        "details": "Enhanced Admission Support"
+      },
+      {
+        "name": "KPJ Sabah Specialist Hospital",
+        "state": "Sabah",
+        "address": "Lot No.2 Off, Jalan Damai, Luyang Commercial Centre, 88300 Kota Kinabalu, Sabah",
+        "details": "Priority Admission"
+      },
+      {
+        "name": "Borneo Medical Centre (Kuching)",
+        "state": "Sarawak",
+        "address": "Lot 10992, Section 64 KTLD, Jalan Tun Jugah, 93350 Kuching, Sarawak",
+        "details": "The Great Journey Hospital Partner"
       }
     ],
     "clinics": [
       {
-        "name": "The Great Journey Clinic List",
-        "state": "Malaysia (All States)",
-        "address": "Official PDF Directory",
-        "details": "https://www.greateasternlife.com/content/dam/greateasternlife/malaysia/english/customer-services/healthcare-services/healthcare-overview/pdf/the-great-journey-clinic-list.pdf"
+        "name": "Annura Clinic (Alor Setar)",
+        "state": "Kedah",
+        "address": "Alor Setar, Kedah",
+        "details": "Primary Outpatient Care"
+      },
+      {
+        "name": "O2 Klinik (Alor Setar)",
+        "state": "Kedah",
+        "address": "Ground Mezzanine Floor, Aman Walk, Lebuhraya Darul Aman, 05100 Alor Setar, Kedah",
+        "details": "Primary Outpatient Care"
+      },
+      {
+        "name": "O2 Klinik (Kulim)",
+        "state": "Kedah",
+        "address": "No. 10 (Ground Floor) Jalan Klc 1, Kulim Landmark Central, 09000 Kulim, Kedah",
+        "details": "Primary Outpatient Care"
+      },
+      {
+        "name": "Poliklinik Dr. Azhar Dan Rakan-Rakan",
+        "state": "Kedah",
+        "address": "Multiple branches across Kedah, Perlis & Penang",
+        "details": "Panel Clinic Network"
       }
     ],
     "clinics_24hr": [
       {
-        "name": "The Great Journey Clinic List (24 Hours)",
-        "state": "Malaysia (All States)",
-        "address": "Official PDF Directory",
-        "details": "https://www.greateasternlife.com/content/dam/greateasternlife/malaysia/english/customer-services/healthcare-services/healthcare-overview/pdf/the-great-journey-clinic-list-24-hours.pdf"
+        "name": "Poliklinik Permai Alor Setar 24 Jam",
+        "state": "Kedah",
+        "address": "Dataran Shahab, Jalan Datuk Kumbar, 05300 Alor Setar, Kedah",
+        "details": "24-Hour Outpatient Care"
+      },
+      {
+        "name": "Chenang Clinic Jitra 24 Jam",
+        "state": "Kedah",
+        "address": "Pekan Jitra 3, 06000 Jitra, Kedah",
+        "details": "24-Hour Outpatient Care"
       }
     ],
     "vaccination": [
       {
-        "name": "The Great Journey Clinic (for Vaccination Health Programme 2026) List",
+        "name": "The Great Journey Designated Vaccination Clinics",
         "state": "Malaysia (All States)",
-        "address": "Official PDF Directory",
-        "details": "https://www.greateasternlife.com/content/dam/greateasternlife/malaysia/english/customer-services/healthcare-services/healthcare-overview/pdf/the-great-journey-clinic-vaccination-programme-list.pdf"
-      }
-    ],
-    "hospitals": [
-      {
-        "name": "The Great Journey Hospital List",
-        "state": "Malaysia (All States)",
-        "address": "Official PDF Directory",
-        "details": "https://www.greateasternlife.com/content/dam/greateasternlife/malaysia/english/customer-services/healthcare-services/healthcare-overview/pdf/the-great-journey-hospital-list.pdf"
+        "address": "Refer to official 2026 Vaccination Programme list",
+        "details": "Eligible for Health Programme 2026"
       }
     ],
     "hospitals_ae": [
       {
-        "name": "The Great Journey Hospital (for Accident and Emergency Outpatient Treatment) List",
+        "name": "Aurelius Hospital Alor Setar (A&E)",
+        "state": "Kedah",
+        "address": "Bandar Baru Mergong, 05150 Alor Setar, Kedah",
+        "details": "Accident & Emergency Outpatient Treatment (9:00 PM - 8:00 AM)"
+      }
+    ],
+    "pharmacies": [
+      {
+        "name": "The Great Journey Panel Pharmacies",
         "state": "Malaysia (All States)",
-        "address": "Official PDF Directory",
-        "details": "https://www.greateasternlife.com/content/dam/greateasternlife/malaysia/english/customer-services/healthcare-services/healthcare-overview/pdf/the-great-journey-hospital-ae-list.pdf"
+        "address": "Nationwide Panel Network",
+        "details": "Outpatient Pharmacy Benefits"
       }
     ],
     "physio": [
       {
-        "name": "The Great Journey Physiotherapy Centre List",
+        "name": "The Great Journey Physiotherapy Centres",
         "state": "Malaysia (All States)",
-        "address": "Official PDF Directory",
-        "details": "https://www.greateasternlife.com/content/dam/greateasternlife/malaysia/english/customer-services/healthcare-services/healthcare-overview/pdf/the-great-journey-physiotherapy-centre-list.pdf"
+        "address": "Nationwide Panel Network",
+        "details": "Rehabilitation & Therapy Coverage"
       }
     ]
   }
