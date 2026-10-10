@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GE The Great Journey Finder</title>
+<style>
+  :root{
+    --ink:#2b1414; --paper:#f7f3ef; --card:#ffffff; --line:#e3d4cd;
+    --main:#8f2a2a; --deep:#5c1a1a; --amber:#b5651d; --muted:#6b5a56; --ok:#2f6b4f; --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--paper);color:var(--ink);font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;line-height:1.4;-webkit-font-smoothing:antialiased;}
+  .sans,input,select,button,.tag,.note,.updated,.count-line,footer,.action-row a,summary{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+
+  header{background:var(--deep);color:#f2efe4;padding:18px 16px 14px;position:sticky;top:0;z-index:20;}
+  header h1{margin:0 0 2px;font-size:1.3rem;font-weight:600;}
+  header p{margin:0;font-size:.82rem;color:#e6cfc9;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+  .tabs{display:flex;gap:6px;margin-top:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab-btn{flex:0 0 auto;border:none;background:rgba(255,255,255,.12);color:#f0dcd6;padding:8px 14px;font-size:.85rem;font-weight:600;border-radius:999px;cursor:pointer;white-space:nowrap;}
+  .tab-btn.active{background:#f2efe4;color:var(--deep);}
+
+  main{max-width:680px;margin:0 auto;padding:14px 14px 50px;}
+  .note{background:#fff6e8;border:1px solid #ecd9ad;border-radius:var(--radius);padding:10px 12px;font-size:.8rem;color:#6b5222;margin-bottom:10px;}
+  .note strong{color:#5a431a;}
+  .note details{margin-top:6px;}
+  .note summary{cursor:pointer;font-weight:600;}
+  .note ul{margin:6px 0 0;padding-left:18px;}
+  .updated{background:#f0e8e3;border-radius:8px;padding:8px 10px;font-size:.78rem;color:var(--muted);margin-bottom:10px;}
+  .updated.warn{background:#fbeadb;color:#7a4510;border:1px solid #efcfae;}
+  .updated a{color:inherit;font-weight:600;}
+
+  .controls{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;}
+  .row{display:flex;gap:8px;}
+  input[type=search],select{font-size:.95rem;padding:10px 12px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);color:var(--ink);width:100%;min-width:0;}
+  select{max-width:170px;}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;}
+  .chip{border:1px solid var(--main);background:var(--card);color:var(--deep);font-size:.82rem;font-weight:600;padding:7px 12px;border-radius:999px;cursor:pointer;}
+  .chip.on{background:var(--main);color:#fff;}
+  .locate{display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 14px;border-radius:var(--radius);border:1px solid var(--main);background:var(--card);color:var(--deep);font-weight:600;font-size:.9rem;cursor:pointer;}
+  .locate.on{background:var(--main);color:#fff;}
+  .status{font-size:.76rem;color:var(--muted);}
+  .count-line{font-size:.78rem;color:var(--muted);margin:2px 2px 8px;}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 14px 12px;margin-bottom:10px;}
+  .card h3{margin:0 0 3px;font-size:1.02rem;font-weight:600;color:var(--deep);}
+  .aka{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:.74rem;color:var(--muted);margin:0 0 4px;font-style:italic;}
+  .addr{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:.86rem;color:var(--muted);margin:0 0 8px;}
+  .hours{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:.8rem;color:var(--ink);margin:-2px 0 8px;}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+  .tag{font-size:.72rem;padding:3px 9px;border-radius:999px;background:#eef2ea;color:var(--deep);white-space:nowrap;}
+  .tag.warn{background:#fbeadb;color:var(--amber);}
+  .tag.ok{background:#e3f1e9;color:var(--ok);}
+  .tag.dist{background:var(--deep);color:#fff;}
+  .tag.price{background:#f4e6e2;color:var(--deep);font-weight:600;}
+  .action-row{display:flex;gap:8px;}
+  .action-row a{flex:1;text-align:center;padding:9px 8px;border-radius:8px;text-decoration:none;font-size:.83rem;font-weight:600;border:1px solid var(--line);color:var(--deep);}
+  .action-row a.primary{background:var(--main);border-color:var(--main);color:#fff;}
+  .empty{text-align:center;padding:36px 16px;color:var(--muted);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+  .more{display:block;width:100%;margin:6px 0 18px;padding:11px;border-radius:var(--radius);border:1px solid var(--main);background:transparent;color:var(--deep);font-weight:600;cursor:pointer;font-size:.9rem;}
+  footer{text-align:center;font-size:.72rem;color:var(--muted);padding:6px 20px 34px;max-width:680px;margin:0 auto;}
+</style>
+</head>
+<body>
+<header>
+  <h1>The Great Journey Finder</h1>
+  <p>Great Journey hospitals, clinics, pharmacies, physiotherapy &amp; vaccination near you</p>
+  <div class="tabs" id="tabs"></div>
+</header>
+<main id="main"><div class="empty">Loading…</div></main>
+<footer>
+  Information comes from the lists Great Eastern publishes and may change without notice. Please call the provider before you go.
+  Benefits and eligibility depend on your own policy — refer to your policy contract.
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var meta=null, userLoc=null, current=null;
+var cache={};      // tab id -> records
+var uiState={};    // tab id -> {q,state,flags,brand,shown}
+var STEP=30;
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function tel(t){var first=String(t||'').split('/')[0];return 'tel:'+first.replace(/[^\d+]/g,'');}
+function maps(r){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(r.name+', '+r.address);}
+function hav(a,b,c,d){var R=6371,t=Math.PI/180,x=(c-a)*t,y=(d-b)*t,q=Math.sin(x/2)*Math.sin(x/2)+Math.cos(a*t)*Math.cos(c*t)*Math.sin(y/2)*Math.sin(y/2);return R*2*Math.atan2(Math.sqrt(q),Math.sqrt(1-q));}
+
+function fmt(d){
+  if(!d||!d.iso) return null;
+  var p=d.iso.split('-'); var m=MONTHS[parseInt(p[1],10)-1], y=p[0];
+  return d.precision==='month' ? m+' '+y : parseInt(p[2],10)+' '+m+' '+y;
+}
+function ageDays(d){ if(!d||!d.iso) return null; return (Date.now()-new Date(d.iso+'T00:00:00').getTime())/86400000; }
+
+/* ---------- tab definitions ---------- */
+var TABS=[
+ {id:'hospitals',label:'Hospitals',file:'hospitals.json',noun:'hospital',plural:'hospitals',dates:['hospital'],src:'hospital',
+  flags:[{k:'ae',label:'A&E outpatient (9pm–8am)'},{k:'nodep',label:'No deposit on admission'}],
+  info:function(){
+    var list=(meta.ae_diagnoses||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('');
+    return '<strong>For members whose plan covers hospitalisation.</strong> The Great Journey hospitals are a curated part of the panel with extra service touches '+
+      '(for example priority admission counters, fee waivers and early discharge — T&amp;C apply). '+
+      '<details><summary>About A&amp;E outpatient treatment (9pm–8am)</summary>'+
+      'Only for GREAT MediValue, MediValue Plus, MediValue Exclusive and MediValue Plus Exclusive customers, for the covered diagnoses below '+
+      'or emergency accidental treatment within 24 hours of the accident, subject to your policy terms.'+
+      (list?'<ul>'+list+'</ul>':'')+'</details>';
+  },
+  match:function(r,f){ if(f.ae&&!r.ae) return false; if(f.nodep&&r.deposit.toLowerCase().indexOf('yes')===0) return false; return true; },
+  card:function(r){
+    return head(r)+tags(r,[ r.ae?'<span class="tag ok">A&amp;E outpatient 9pm–8am</span>':'',
+      r.deposit&&r.deposit.toLowerCase().indexOf('yes')===0?'<span class="tag warn">Deposit on admission</span>':'<span class="tag">No deposit on admission</span>' ])+actions(r,true);
+  }},
+ {id:'clinics',label:'Clinics',file:'clinics.json',noun:'clinic',plural:'clinics',dates:['clinic','clinic24'],src:'clinic',
+  flags:[{k:'h24',label:'Open 24 hours'}],
+  info:function(){return '<strong>For members whose plan covers outpatient treatment.</strong> Operating hours can vary — please call the clinic before you go.';},
+  match:function(r,f){ return !(f.h24&&!r.h24); },
+  card:function(r){return head(r)+tags(r,[r.h24?'<span class="tag ok">Open 24 hours</span>':''])+actions(r,true);}},
+ {id:'pharmacies',label:'Pharmacies',file:'pharmacies.json',noun:'pharmacy',plural:'pharmacies',dates:['pharmacy'],src:'pharmacy',brand:true,
+  flags:[],
+  info:function(){return 'Participating pharmacy outlets across several pharmacy brands. Operating hours may vary — please call the outlet before you go.';},
+  match:function(r,f,u){ return !(u.brand&&r.brand!==u.brand); },
+  card:function(r){return head(r)+tags(r,['<span class="tag">'+esc(r.brand)+'</span>'])+hoursLine(r)+actions(r,false);}},
+ {id:'physio',label:'Physio',file:'physio.json',noun:'physiotherapy centre',plural:'physiotherapy centres',dates:['physio'],src:'physio',
+  flags:[],
+  info:function(){return 'Participating physiotherapy centres. Operating hours differ by day — please check with the centre before you go.';},
+  match:function(){return true;},
+  card:function(r){return head(r)+tags(r,[])+hoursLine(r)+actions(r,false);}},
+ {id:'vaccination',label:'Vaccination',file:'vaccination.json',noun:'vaccination clinic',plural:'vaccination clinics',dates:['vaccination'],src:'vaccination',
+  flags:[],
+  info:function(){
+    return '<strong>Vaccination Health Programme 2026</strong> — dengue and influenza vaccination at selected Great Journey clinics. '+
+      '<details><summary>How it works</summary><ul>'+
+      '<li>For Great Eastern Rewards (GER) app users only: scan the programme QR code at the clinic counter, complete the questionnaire and an e-Voucher is issued.</li>'+
+      '<li>Vaccination is by appointment only, and the e-Voucher is valid once, at a participating clinic.</li>'+
+      '<li>It is a self-pay programme — payment is made directly to the clinic (prices shown are per the list).</li>'+
+      '<li>Programme period: May to 31 December 2026. Please read the full terms and conditions in the official list.</li></ul></details>';
+  },
+  match:function(){return true;},
+  card:function(r){
+    var p=[]; if(r.dengue) p.push('<span class="tag price">Dengue RM'+esc(r.dengue)+'</span>'); if(r.influenza) p.push('<span class="tag price">Influenza RM'+esc(r.influenza)+'</span>');
+    return head(r)+tags(r,p)+actions(r,!!r.tel);
+  }}
+];
+
+function head(r){return '<h3>'+esc(r.name)+'</h3>'+(r.aka?'<p class="aka">'+esc(r.aka)+'</p>':'')+'<p class="addr">'+esc(r.address)+'</p>';}
+function hoursLine(r){ if(!r.hours) return ''; return '<p class="hours">'+r.hours.split('; ').map(esc).join('<br>')+'</p>'; }
+function tags(r,extra){
+  var t=[]; if(r._d!=null) t.push('<span class="tag dist">'+(r._d<2?'Nearby':'~'+(r._d<10?r._d.toFixed(1):Math.round(r._d))+' km')+'</span>');
+  t.push('<span class="tag">'+esc(r.state)+'</span>');
+  return '<div class="tags">'+t.join('')+extra.join('')+'</div>';
+}
+function actions(r,hasTel){
+  return '<div class="action-row">'+(hasTel&&r.tel?'<a class="primary" href="'+tel(r.tel)+'">Call '+esc(r.tel)+'</a>':'')+
+         '<a href="'+maps(r)+'" target="_blank" rel="noopener">Directions</a></div>';
+}
+
+/* ---------- rendering ---------- */
+function tabById(id){for(var i=0;i<TABS.length;i++) if(TABS[i].id===id) return TABS[i]; return TABS[0];}
+
+function buildTabs(){
+  var el=document.getElementById('tabs');
+  el.innerHTML=TABS.map(function(t){return '<button class="tab-btn" data-id="'+t.id+'">'+esc(t.label)+'</button>';}).join('');
+  el.addEventListener('click',function(e){var b=e.target.closest('.tab-btn'); if(b) openTab(b.getAttribute('data-id'));});
+}
+
+function openTab(id){
+  current=tabById(id);
+  try{ history.replaceState(null,'','#'+current.id); }catch(e){}
+  [].forEach.call(document.querySelectorAll('.tab-btn'),function(b){b.classList.toggle('active',b.getAttribute('data-id')===current.id);});
+  if(!uiState[current.id]) uiState[current.id]={q:'',state:'',brand:'',flags:{},shown:STEP};
+  if(cache[current.id]){ renderTab(); return; }
+  document.getElementById('main').innerHTML='<div class="empty">Loading '+esc(current.label)+'…</div>';
+  fetch('data/'+current.file).then(function(r){return r.json();}).then(function(d){
+    d.forEach(function(r){r._h=(r.name+' '+r.address+' '+(r.aka||'')+' '+r.state+' '+(r.brand||'')).toLowerCase();});
+    cache[current.id]=d; if(current&&current.id===id) renderTab();
+  }).catch(function(){document.getElementById('main').innerHTML='<div class="empty">Could not load this list. Please check your connection and try again.</div>';});
+}
+
+function dateBlock(t){
+  var parts=[], warn=false;
+  t.dates.forEach(function(k){
+    var d=meta.updated&&meta.updated[k]; var f=fmt(d);
+    var label=(k==='clinic24'?'24-hour list':k==='hospital_ae'?'A&E list':'List');
+    if(t.dates.length===1) label='List';
+    parts.push(f?label+' updated '+f:label+' date not shown');
+    var a=ageDays(d); if(a!=null&&a>150) warn=true;
+  });
+  var src=meta.sources&&meta.sources[t.src];
+  var line=parts.join(' · ')+'.';
+  if(warn) line+=' This list is several months old — Great Eastern may not have published a newer version, so please call to confirm.';
+  else line+=' Always call ahead to confirm.';
+  if(src) line+=' <a href="'+esc(src)+'" target="_blank" rel="noopener">Official PDF</a>';
+  return '<div class="updated'+(warn?' warn':'')+'">'+line+'</div>';
+}
+
+function renderTab(){
+  var t=current, u=uiState[t.id], data=cache[t.id];
+  var stateOpts='<option value="">All states</option>'+(meta.states||[]).map(function(s){return '<option'+(u.state===s?' selected':'')+'>'+esc(s)+'</option>';}).join('');
+  var brandSel=t.brand?'<select id="brand" aria-label="Brand"><option value="">All brands</option>'+(meta.brands||[]).map(function(b){return '<option'+(u.brand===b?' selected':'')+'>'+esc(b)+'</option>';}).join('')+'</select>':'';
+  var chips=(t.flags||[]).map(function(f){return '<button class="chip'+(u.flags[f.k]?' on':'')+'" data-flag="'+f.k+'">'+esc(f.label)+'</button>';}).join('');
+  document.getElementById('main').innerHTML=
+    '<div class="note">'+t.info()+'</div>'+dateBlock(t)+
+    '<div class="controls">'+
+      '<div class="row"><input type="search" id="q" placeholder="Search name, address or town…" value="'+esc(u.q)+'"><select id="state" aria-label="State">'+stateOpts+'</select></div>'+
+      (brandSel||chips?'<div class="chips">'+(brandSel?'<div class="row" style="flex:1 1 100%">'+brandSel.replace('<select','<select style="max-width:none"')+'</div>':'')+chips+'</div>':'')+
+      '<button class="locate'+(userLoc?' on':'')+'" id="locate">📍 '+(userLoc?'Sorted by distance from me':'Sort by distance from me')+'</button>'+
+      '<div class="status" id="status">'+(userLoc?'Distances are approximate (nearest town centre), not door-to-door.':'')+'</div>'+
+    '</div><div class="count-line" id="count"></div><div id="list"></div><button class="more" id="more" style="display:none">Show more</button>';
+  wire(); renderList();
+}
+
+function renderList(){
+  var t=current, u=uiState[t.id], data=cache[t.id];
+  var toks=u.q.toLowerCase().split(/\s+/).filter(Boolean);
+  var res=data.filter(function(r){
+    if(u.state&&r.state!==u.state) return false;
+    for(var i=0;i<toks.length;i++) if(r._h.indexOf(toks[i])<0) return false;
+    return t.match(r,u.flags,u);
+  });
+  res.forEach(function(r){ r._d=(userLoc&&r.lat!=null)?hav(userLoc.lat,userLoc.lng,r.lat,r.lng):null; });
+  if(userLoc) res.sort(function(a,b){return (a._d==null)-(b._d==null)||Math.round(a._d*2)/2-Math.round(b._d*2)/2||a.name.localeCompare(b.name);});
+  else res.sort(function(a,b){return a.name.localeCompare(b.name);});
+  document.getElementById('count').textContent=res.length+' of '+data.length+' '+(data.length===1?t.noun:t.plural)+(userLoc?' · nearest first':' · A to Z');
+  var out=document.getElementById('list');
+  var slice=res.slice(0,u.shown);
+  out.innerHTML=slice.length?slice.map(function(r){return '<div class="card">'+t.card(r)+'</div>';}).join(''):'<div class="empty">Nothing matches your search. Try fewer words or another state.</div>';
+  document.getElementById('more').style.display=res.length>u.shown?'block':'none';
+}
+
+function wire(){
+  var u=uiState[current.id];
+  var q=document.getElementById('q'); q.addEventListener('input',function(){u.q=q.value;u.shown=STEP;renderList();});
+  document.getElementById('state').addEventListener('change',function(e){u.state=e.target.value;u.shown=STEP;renderList();});
+  var b=document.getElementById('brand'); if(b) b.addEventListener('change',function(e){u.brand=e.target.value;u.shown=STEP;renderList();});
+  [].forEach.call(document.querySelectorAll('.chip'),function(c){c.addEventListener('click',function(){var k=c.getAttribute('data-flag');u.flags[k]=!u.flags[k];c.classList.toggle('on',!!u.flags[k]);u.shown=STEP;renderList();});});
+  document.getElementById('more').addEventListener('click',function(){u.shown+=STEP;renderList();});
+  document.getElementById('locate').addEventListener('click',function(){
+    var st=document.getElementById('status');
+    if(!navigator.geolocation){st.textContent='Location is not available on this device or browser.';return;}
+    st.textContent='Getting your location…';
+    navigator.geolocation.getCurrentPosition(function(p){userLoc={lat:p.coords.latitude,lng:p.coords.longitude};renderTab();},
+      function(err){st.textContent='Could not get your location ('+err.message+'). You can still search by name or state.';},{enableHighAccuracy:true,timeout:8000});
+  });
+}
+
+/* ---------- start ---------- */
+buildTabs();
+window.addEventListener('hashchange',function(){var h=(location.hash||'').replace('#',''); if(meta&&h&&(!current||current.id!==h)) openTab(tabById(h).id);});
+fetch('data/meta.json').then(function(r){return r.json();}).then(function(m){
+  meta=m; var h=(location.hash||'').replace('#',''); openTab(h?tabById(h).id:'hospitals');
+}).catch(function(){document.getElementById('main').innerHTML='<div class="empty">Could not load the data. If you opened this file directly, please open it from the website instead.</div>';});
+})();
+</script>
+</body>
+</html>
